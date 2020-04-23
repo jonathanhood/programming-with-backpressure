@@ -30,7 +30,7 @@ The interface looks something like this:
 ```python
 class Observer:
   def on_next(elem):
-    pass1
+    pass
   
   def on_complete(): 
     pass
