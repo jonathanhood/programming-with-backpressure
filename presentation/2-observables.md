@@ -75,7 +75,8 @@ to subscribe to the data source. The exact details of this differ a bit between 
 
 * When using python and rxpy this is most commonly accomplished by using the factory operators available
   as part of the `rx` package.
-* When using scala and monix this is accomplished by generating 
+* When using scala and monix this is accomplished by using the factory methods available on the `Observable`
+  object.
 
 ### Creating a Python Observable
 
