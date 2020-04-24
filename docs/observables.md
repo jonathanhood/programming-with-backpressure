@@ -1,9 +1,11 @@
-# 2: Creating backpressured systems with observables
+# Stream Processing with Observables
+
+* [Prev](index.md)
 
 For the purposes of this talk we are going to focus on using an **observable** to
 build a system which uses backpressure to respond to overload situations. This is
 the solution provided as part of the reactive extensions specification and is, as
-a result, available in a wide varity of languages.
+a result, available in a wide variety of languages.
 
 So, what is an `Observable`? At its core it's basically an interface for an `Observer`
 to subscribe to a data source along with some contractual details about how that

@@ -1,4 +1,6 @@
-# 1: Dealing with Software Operating Beyond its Limits
+# Dealing with Software Operating Beyond its Limits
+
+* [Next](observables.md)
 
 Have you ever written software that, at some point in its lifetime, experienced an input
 load that was far higher than what you ever expected or tested for it to see? I can
@@ -57,5 +59,7 @@ with these kinds of overloads:
 And, there are more. The list of strategies I can employ grows pretty large when I have this fundamental
 tool at my disposal - _backpressure_.
 
-So, how do I buil a system that has backpressure? Let's start to tackle that in the next section by looking
+So, how do I build a system that has backpressure? Let's start to tackle that in the next section by looking
 at *Observables* and how they create a system with backpressure weaved into its very infrastructure.
+
+* [Next](observables.md)
