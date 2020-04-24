@@ -1,6 +1,7 @@
 # Programming with Backpressure
 
-[![Build Status](https://travis-ci.com/jonathanhood/programming-with-backpressure.svg?branch=master)](https://travis-ci.com/jonathanhood/programming-with-backpressure)
+[![Build Status](https://travis-ci.com/jonathanhood/programming-with-backpressure.svg?branch=master)](https://travis-ci.com/jonathanhood/programming-with-backpressure)3
 
 A quick guide to getting started with using backpressure in your applications.
 
+* [Check out the Tutorial!](https://jonathanhood.github.io/programming-with-backpressure/)
