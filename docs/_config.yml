@@ -3,3 +3,4 @@ author:
   name: Jonathan Hood
   email: jhood06@gmail.com
 theme: minima
+show_excerpts: false
