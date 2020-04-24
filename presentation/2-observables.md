@@ -13,32 +13,14 @@ interface will be used.
 
 In general, an `Observer` has a few important methods:
 
-1. A method called for each data element in the `Observable` with a return from
-   the method indicating when processing of that work has completed and, crucially,
-   if it has complete with an error or a success. See: `on_next` (python) or `onNext` (scala).
-2. A method called when the `Observable` contains no more data elements. See: `on_complete`
-   (python) or `onComplete` (scala).
-3. A method called when the `Observable` encountered some kind of error is encountered. See:
-   `on_error` (python) or `onError` (scala).
+1. An `onNext`  method called for each data element in the `Observable`. In reactive implementations
+   that support backpressure (such as Monix) the return of this method indicates the synchronous or
+   asynchronous completion of processing on the work item with success or an error.
+2. An `onComplete` method that is called when the `Observable` contains no more data elements.
+3. An `onError` method called when the `Observable` encountered some kind of error is encountered
+   which results in the stream terminating.
 
 The interface looks something like this:
-
-### Python Observer Interface
-```python
-class Observer:
-  def on_next(elem):
-    pass
-  
-  def on_complete(): 
-    pass
-  
-  def on_error(error):
-    pass
-```
-
-See: [RxPy Documentation](https://rxpy.readthedocs.io/en/latest/get_started.html#get-started)
-
-### Scala Observer Interface
 
 ```scala
 trait Observer[-T] {
@@ -52,12 +34,14 @@ See: [Monix Documentation](https://monix.io/docs/3x/reactive/observable.html#obs
 
 ## The Observer Contract
 
-Now, it's useful to understand just how these methods are expected to be called. To that end
-there are several rules to be followed:
+Now, it's useful to understand how these methods will be called. There are several rules to be followed
+when interacting with an `Observer`.
 
-1. The `onComplete` will be called 0 or more times. It will never be called more than once for the
-   same event. It will also never be called until its previous invocation ends either synchonrously
-   or asynchronously.
+1. The `onNext` will be called 0 or more times. It will never be called more than once for the
+   same event. In reactive implementations supporting backpressure, it is also important to ensure
+   that the `onNext` will never be called until its previous invocation ends either synchronously
+   or asynchronously. As a result, there is no need for expensive locking or synchronization of this
+   method.
 2. `onComplete`, `onError`, and `onError` will never be called concurrently. As a result, there is
    no need for possible expensive locking or synchronization in these calls when implementing an observer.
 
@@ -68,30 +52,8 @@ there are several rules to be followed:
 ## Creating an Observable
 
 On the other side is an `Observable` which is basically just an interface that allows for an `Observer`
-to subscribe to the data source. The exact details of this differ a bit between platforms. For example:
-
-* When using python and rxpy this is most commonly accomplished by using the factory operators available
-  as part of the `rx` package.
-* When using scala and monix this is accomplished by using the factory methods available on the `Observable`
-  object.
-
-### Creating a Python Observable
-
-```python
-import rx
-
-source = rx.of("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
-
-source.subscribe(
-    on_next = lambda i: print("Received {0}".format(i)),
-    on_error = lambda e: print("Error Occurred: {0}".format(e)),
-    on_completed = lambda: print("Done!"),
-)
-```
-
-See: [RxPy Documentation](https://rxpy.readthedocs.io/en/latest/get_started.html)
-
-### Creating a Scala Observable
+to subscribe to the data source. The exact details of this differ a bit between platforms. When using
+scala and monix this is accomplished by using the factory methods available on the `Observable` object.
 
 ```scala
 import monix.execution.Scheduler.Implicits.global
@@ -119,29 +81,20 @@ client as stream of text lines where each line is a "command". With that, let's 
 commands:
 
 1. "echo" the received line of text to simulate a trivial command to process.
-2. "sleep" for 10 seconds and then emit the string "awake" to similulate a long-running command
+2. "sleep" for 10 seconds and then emit the string "awake" to simulate a long-running command
    to be processed.
 
 In each case the commands should be executed in-order. If a command cannot be processed within 1
 second (e.g. because the 'sleep' command takes to long) then it should immediately echo the line
 "try again".
 
-### Python Command Processor
-
-### Scala Command Processor
-
 In the following example we implement this simple "app" in scala by taking advantage of a few operators.
 
-* The `timeoutOnSlowDownstream` operator automatically consumes events from the source and emits them
-  downstream. If the downstream processing takes less that the provided timeout then nothing happens.
-  If the downstream processing takes longer than the timeout than it is
-  [cancelled](https://monix.io/docs/3x/reactive/observable.html#execution) and a timeout error is
-  emitted instead.
-* The `materialize` operator allows us to get visibility into the errors generated by the previous stages.
-  This allows us to print user-friendly messages later in the pipeline and avoid seeing a stack trace dumb
-  for expected situations.
 * The `mapEval` operator executes a given [`Task`](https://monix.io/docs/3x/eval/task.html) for each element
   of the source observable.
+* Dealing with the timeout condition is handled by `Task` itself which times out any command processing 
+  after 1 second, cancels the execution of that task, and returns instead a message for the user indicating
+  that they should try again.
 
 ```scala
 import cats.effect.ExitCode

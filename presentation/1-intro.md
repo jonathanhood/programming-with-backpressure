@@ -17,10 +17,10 @@ that, in general, this is a faulty assumption. Cursed optimism strikes again!
 
 Luckily, dealing with these situations doesn't have to be _hard_. We just need good tools
 to make it easier. In this guide we will talk about applying the concept of _*backpressure*_
-to our software with code examples presented in Python (using [rxpy](https://rxpy.readthedocs.io))
-and Scala (using [Monix](https://monix.io/). These aren't languages you work in every day?
-No problem! It turns out these are both implementations of [reactive extensions](http://reactivex.io/)
-which are available in a wide variety of languages.
+to our software with code examples presented in Scala using [Monix](https://monix.io/. This
+isn't the languages you work in every day? No problem! It turns out this is one implementation
+of [reactive extensions](http://reactivex.io/) which are available in a wide variety of
+languages.
 
 ## What is Backpressure?
 
@@ -48,7 +48,7 @@ So, then, backpressure is a feedback mechanism that allows a system to detect an
 overload situation. With such a mechanism I could potentially employ a few obvious strategies for dealing
 with these kinds of overloads:
 
-1. I could buffer input until the system becomes available again to process it.
+1. I could buffer input until the sys``tem becomes available again to process it.
 2. I can drop inputs that can't be immediately processed.
 3. I could buffer buffer _and_ drop the oldest inputs when the buffer grows to large.
 4. I could signal back to the input source that the overload is occurring.
