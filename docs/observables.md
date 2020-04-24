@@ -2,6 +2,7 @@
 
 * [Home](https://jonathanhood.github.io/programming-with-backpressure/)
 * [Prev](index.md)
+* [Next](backpressure.md)
 
 For the purposes of this talk we are going to focus on using an **observable** to
 build a system which uses backpressure to respond to overload situations. This is
@@ -162,3 +163,4 @@ echo after
 No more commands to process. Shutting down!
 ```
 
+* [Next](backpressure.md)
